@@ -1,0 +1,4 @@
+LIBRARY	"crash_log"
+EXPORTS
+SKSEPlugin_Query
+SKSEPlugin_Load
