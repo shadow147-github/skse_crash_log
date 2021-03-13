@@ -26,14 +26,14 @@ issues that I'm not aware of (memory leaks, crashes, ...).
 
 #define _R AddressToModOffset // Because lazy
 
-UInt32							g_version = 3; // Sets SKSE version and log output etc.
-IDebugLog						gLog("crash_log.log"); // Not the log containing the dumps
-PluginHandle					g_pluginHandle = kPluginHandle_Invalid;
-SKSESerializationInterface		* g_serialization = NULL;
-LPTOP_LEVEL_EXCEPTION_FILTER	g_original_exception_handler = NULL;
-int								g_exception_counter = 0;
-int								g_oeh_called = 0; // How many times the original exception handler has been called
-int								g_oeh_returned = 0; // How many times the original exception handler has returned
+UInt32 g_version = 4; // Sets plugin version (required by SKSE) and log output etc.
+IDebugLog gLog("crash_log.log"); // Not the log containing the dumps
+PluginHandle g_pluginHandle = kPluginHandle_Invalid;
+SKSESerializationInterface * g_serialization = NULL;
+LPTOP_LEVEL_EXCEPTION_FILTER g_original_exception_handler = NULL;
+int g_exception_counter = 0;
+int g_oeh_called = 0; // How many times the original exception handler has been called
+int g_oeh_returned = 0; // How many times the original exception handler has returned
 
 void CreateExceptionHandler()
 {
@@ -95,6 +95,8 @@ LONG WINAPI ExceptionHandler(EXCEPTION_POINTERS * info)
 		{
 			_MESSAGE("Original exception handler caused an exception. Setting pointer to NULL to avoid infinite recursion.");
 			g_original_exception_handler = NULL;
+			g_oeh_called = 0;
+			g_oeh_returned = 0;
 			//PrintException(&modlist, info); // Disabled because it might be misleading
 		}
 		else
@@ -117,7 +119,8 @@ LONG WINAPI ExceptionHandler(EXCEPTION_POINTERS * info)
 
 	// Crash
 	_MESSAGE("Continuing code execution (i.e. continue crashing)");
-	return EXCEPTION_CONTINUE_EXECUTION;
+	//return EXCEPTION_CONTINUE_EXECUTION; // Confused about what these actually do.
+	return EXCEPTION_EXECUTE_HANDLER; // Seems like this fixed the infinite loop in version 3.
 }
 
 void PrintException(ModList * modlist, EXCEPTION_POINTERS * info)
