@@ -75,5 +75,5 @@ void ModList::Resolve(DWORD address, size_t size, char * pretty)
 		}
 	}
 
-	sprintf_s(pretty, size, "<unknown>+0x%08x", address); // Fallback
+	sprintf_s(pretty, size, "0x%08x", address); // Fallback
 }

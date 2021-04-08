@@ -26,7 +26,7 @@ issues that I'm not aware of (memory leaks, crashes, ...).
 
 #define _R AddressToModOffset // Because lazy
 
-UInt32 g_version = 4; // Sets plugin version (required by SKSE) and log output etc.
+UInt32 g_version = 5; // Sets plugin version (required by SKSE) and log output etc.
 IDebugLog gLog("crash_log.log"); // Not the log containing the dumps
 PluginHandle g_pluginHandle = kPluginHandle_Invalid;
 SKSESerializationInterface * g_serialization = NULL;
